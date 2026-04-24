@@ -22,16 +22,18 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config) => {
+  webpack: (config, { webpack }) => {
     if (clerkMockMode) {
-      config.resolve.alias = {
-        ...(config.resolve.alias ?? {}),
-        '@clerk/nextjs$': path.resolve(__dirname, 'lib/clerk-stub.tsx'),
-        '@clerk/nextjs/server$': path.resolve(
-          __dirname,
-          'lib/clerk-stub-server.tsx',
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(
+          /^@clerk\/nextjs$/,
+          path.resolve(__dirname, 'lib/clerk-stub.tsx'),
         ),
-      };
+        new webpack.NormalModuleReplacementPlugin(
+          /^@clerk\/nextjs\/server$/,
+          path.resolve(__dirname, 'lib/clerk-stub-server.tsx'),
+        ),
+      );
     }
     return config;
   },
