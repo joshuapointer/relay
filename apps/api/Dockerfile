@@ -59,8 +59,13 @@ COPY --from=build --chown=nodeuser:nodejs /app/apps/api/package.json ./apps/api/
 COPY --from=build --chown=nodeuser:nodejs /app/node_modules ./node_modules
 COPY --from=build --chown=nodeuser:nodejs /app/apps/api/node_modules ./apps/api/node_modules
 
+# Copy workspace packages so pnpm symlinks in node_modules resolve at runtime
+COPY --from=build --chown=nodeuser:nodejs /app/packages/shared-types ./packages/shared-types
+COPY --from=build --chown=nodeuser:nodejs /app/packages/config-tsconfig ./packages/config-tsconfig
+
 # Copy prisma client artifacts
 COPY --from=build --chown=nodeuser:nodejs /app/apps/api/prisma ./apps/api/prisma
+COPY --from=build --chown=nodeuser:nodejs /app/package.json /app/pnpm-workspace.yaml ./
 
 USER nodeuser
 
