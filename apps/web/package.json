@@ -13,7 +13,6 @@
     "test:e2e:update-snapshots": "playwright test --update-snapshots"
   },
   "dependencies": {
-    "@clerk/nextjs": "^5",
     "@headlessui/react": "^2.2.10",
     "@hookform/resolvers": "^5.2.2",
     "@relay/design-tokens": "workspace:*",
@@ -22,6 +21,7 @@
     "@relay/ui-core": "workspace:*",
     "@tanstack/react-query": "^5",
     "next": "^14.2",
+    "next-auth": "^4.24",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.73.1",

@@ -1,8 +1,8 @@
 'use client';
 
-import { useClerk } from '@clerk/nextjs';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
+import { signOut } from 'next-auth/react';
 import { useState } from 'react';
 
 import { ErrorState } from '@/components/ErrorState';
@@ -12,7 +12,6 @@ const DELETE_CONFIRM_WORD = 'DELETE';
 
 export default function SettingsPage() {
   const sdk = useSdk();
-  const { signOut } = useClerk();
   const router = useRouter();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -30,7 +29,7 @@ export default function SettingsPage() {
     setDeleteError(null);
     try {
       await sdk.profile.delete();
-      await signOut();
+      await signOut({ callbackUrl: '/' });
       router.push('/');
     } catch {
       setDeleteError('Failed to delete account. Please try again.');

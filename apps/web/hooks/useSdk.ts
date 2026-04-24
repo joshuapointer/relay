@@ -1,16 +1,17 @@
 'use client';
 
-import { useAuth } from '@clerk/nextjs';
 import type { RelayClient } from '@relay/sdk';
+import { useSession } from 'next-auth/react';
 import { useMemo } from 'react';
 
 import { initSdkClient } from '@/lib/sdk.client';
 
 /**
- * Returns a memoized SDK client wired to the current Clerk session token.
- * Must be used inside a component that is a descendant of <ClerkProvider>.
+ * Returns a memoized SDK client wired to the current NextAuth session token.
+ * The accessToken is the Authentik access_token persisted in the JWT callback.
  */
 export function useSdk(): RelayClient {
-  const { getToken } = useAuth();
-  return useMemo(() => initSdkClient(() => getToken()), [getToken]);
+  const { data: session } = useSession();
+  const token = session?.accessToken ?? null;
+  return useMemo(() => initSdkClient(async () => token), [token]);
 }

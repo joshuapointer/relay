@@ -11,9 +11,10 @@ import { render, screen } from '@testing-library/react';
 import type { ComponentType } from 'react';
 import { beforeAll, describe, expect, it, vi } from 'vitest';
 
-// Mock @clerk/nextjs so the component renders in jsdom without a real Clerk env
-vi.mock('@clerk/nextjs', () => ({
-  UserButton: () => <button type="button">User</button>,
+// Mock next-auth/react so the component renders in jsdom without a real session
+vi.mock('next-auth/react', () => ({
+  useSession: () => ({ data: { user: { name: 'Test User', email: 'test@relay.dev' } }, status: 'authenticated' }),
+  signOut: () => undefined,
 }));
 
 // Mock @relay/ui-core BrandLogo to avoid SVG/token resolution issues in jsdom

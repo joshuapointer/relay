@@ -1,10 +1,10 @@
 'use client';
 
-import { useAuth } from '@clerk/nextjs';
 import { createRelayRealtime } from '@relay/sdk';
 import type { RelayRealtime } from '@relay/sdk';
 import type { ShipmentUpdatedPayload } from '@relay/shared-types';
 import { useQueryClient } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 import {
   createContext,
   useCallback,
@@ -25,13 +25,14 @@ export interface RealtimeProviderProps {
 }
 
 export function RealtimeProvider({ children }: RealtimeProviderProps) {
-  const { getToken } = useAuth();
+  const { data: session } = useSession();
+  const token = session?.accessToken ?? null;
   const realtimeRef = useRef<RelayRealtime | null>(null);
 
   useEffect(() => {
     const rt = createRelayRealtime({
       url: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001',
-      getAuthToken: () => getToken(),
+      getAuthToken: async () => token,
     });
 
     realtimeRef.current = rt;
@@ -45,8 +46,7 @@ export function RealtimeProvider({ children }: RealtimeProviderProps) {
       rt.disconnect();
       realtimeRef.current = null;
     };
-    // getToken identity is stable from Clerk; realtimeRef is a ref (intentional empty deps)
-  }, []);
+  }, [token]);
 
   return (
     <RealtimeContext.Provider value={realtimeRef.current}>

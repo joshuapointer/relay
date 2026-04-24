@@ -41,10 +41,7 @@ RUN pnpm --filter @relay/shared-types build
 RUN pnpm --filter @relay/sdk build
 RUN pnpm --filter @relay/ui-core build
 
-# Build with Next.js standalone output. Clerk stub gate needs to be visible
-# to the config at build time, not just runtime.
-ARG NEXT_PUBLIC_CLERK_MOCK_MODE=true
-ENV NEXT_PUBLIC_CLERK_MOCK_MODE=${NEXT_PUBLIC_CLERK_MOCK_MODE}
+# Build with Next.js standalone output.
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm --filter @relay/web build
 

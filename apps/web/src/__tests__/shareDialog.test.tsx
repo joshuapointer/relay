@@ -13,8 +13,14 @@ import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest
 // Mocks
 // ---------------------------------------------------------------------------
 
-vi.mock('@clerk/nextjs', () => ({
-  useAuth: () => ({ getToken: async () => 'test-token' }),
+vi.mock('next-auth/react', () => ({
+  useSession: () => ({
+    data: {
+      accessToken: 'test-token',
+      user: { name: 'Test User', email: 'test@relay.dev' },
+    },
+    status: 'authenticated',
+  }),
 }));
 
 // ---------------------------------------------------------------------------

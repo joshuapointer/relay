@@ -4,11 +4,13 @@
   "outputDirectory": "apps/web/.next",
   "installCommand": "pnpm install --frozen-lockfile",
   "env": {
-    "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY": "@relay-clerk-publishable-key",
-    "CLERK_SECRET_KEY": "@relay-clerk-secret-key",
+    "AUTHENTIK_ISSUER": "@relay-authentik-issuer",
+    "AUTHENTIK_CLIENT_ID": "@relay-authentik-client-id",
+    "AUTHENTIK_CLIENT_SECRET": "@relay-authentik-client-secret",
+    "NEXTAUTH_URL": "@relay-nextauth-url",
+    "NEXTAUTH_SECRET": "@relay-nextauth-secret",
     "NEXT_PUBLIC_API_URL": "@relay-api-url",
-    "NEXT_PUBLIC_WS_URL": "@relay-ws-url",
-    "NEXT_PUBLIC_CLERK_MOCK_MODE": "false"
+    "NEXT_PUBLIC_WS_URL": "@relay-ws-url"
   },
   "headers": [
     {

@@ -9,8 +9,8 @@
  * Usage in beforeEach:
  *   await seedShipment(page, FIXTURE_SHIPMENT);
  *
- * The helper navigates to a stub URL that accepts an MSW-seeded route via
- * the CLERK_MOCK_MODE=true environment flag so Clerk bypasses real auth.
+ * The helper navigates to a stub URL that accepts an MSW-seeded route. Auth
+ * is handled at the Next middleware layer via NextAuth (Authentik).
  */
 
 import type { Page } from '@playwright/test';

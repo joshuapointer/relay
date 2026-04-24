@@ -12,7 +12,7 @@
  *   pnpm --filter @relay/web test:e2e:update-snapshots    # regenerate baselines
  *
  * Environment:
- *   CLERK_MOCK_MODE=true bypasses Clerk auth so pages render without a real session.
+ *   Auth runs through NextAuth (Authentik) — see middleware.ts for protected routes.
  *   API routes are intercepted via seedShipment() so no backend is required.
  *
  * Baseline screenshots live in tests/e2e/__screenshots__/ and are git-committed.

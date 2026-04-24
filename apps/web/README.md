@@ -22,11 +22,13 @@ cp apps/web/.env.example apps/web/.env.local
 
 | Variable | Description |
 |----------|-------------|
-| `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` | Clerk publishable key from dashboard.clerk.com |
-| `CLERK_SECRET_KEY` | Clerk secret key (server-side only) |
+| `AUTHENTIK_ISSUER` | Authentik OIDC issuer URL (ends with trailing slash) |
+| `AUTHENTIK_CLIENT_ID` | OAuth2 client id from the Authentik provider |
+| `AUTHENTIK_CLIENT_SECRET` | OAuth2 client secret |
+| `NEXTAUTH_URL` | Public base URL of this app (e.g. `https://relay.example.com`) |
+| `NEXTAUTH_SECRET` | Random 32-byte secret (`openssl rand -base64 32`) |
 | `NEXT_PUBLIC_API_URL` | Relay API base URL (default: `http://localhost:4000`) |
 | `NEXT_PUBLIC_WS_URL` | Socket.IO server URL (default: `http://localhost:4000`) |
-| `NEXT_PUBLIC_CLERK_MOCK_MODE` | Set `true` to bypass Clerk with a stub test user (dev/test only) |
 
 ## Dev commands
 
@@ -51,8 +53,10 @@ pnpm --filter @relay/web test:e2e  # terminal 2
 pnpm --filter @relay/web build
 ```
 
-## Mock mode
+## Authentication
 
-Set `NEXT_PUBLIC_CLERK_MOCK_MODE=true` (already the default in `.env.example`) to run without real Clerk keys. The `ClerkMock` component in `components/ClerkMock.tsx` auto-signs-in a synthetic test user so every authenticated route is accessible.
-
-**Never enable mock mode in production.**
+The web app uses [NextAuth v4](https://next-auth.js.org/) with the Authentik
+provider. Sign-in is hosted by Authentik; on success the Authentik
+`access_token` is persisted on the JWT session and forwarded as a Bearer
+token to the Relay API (which validates the same RS256 signature against the
+Authentik JWKS).
