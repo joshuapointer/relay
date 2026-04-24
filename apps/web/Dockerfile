@@ -35,6 +35,12 @@ COPY apps/web apps/web/
 
 RUN pnpm install -r --prefer-offline
 
+# Workspace deps must exist on disk (dist/) before Next's transpile resolves them
+RUN pnpm --filter @relay/design-tokens build
+RUN pnpm --filter @relay/shared-types build
+RUN pnpm --filter @relay/sdk build
+RUN pnpm --filter @relay/ui-core build
+
 # Build with Next.js standalone output
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm --filter @relay/web build
