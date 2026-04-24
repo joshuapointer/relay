@@ -1,7 +1,7 @@
 {
   "tool_name": "Bash",
-  "tool_input_preview": "{\"command\":\"sudo docker exec coolify-proxy wget -qO- \\\"http://localhost:8080/api/http/routers\\\" 2>/dev/null | python3 -c \\\"import json,sys;d=json.load(sys.stdin);[print(r.get('name'),'|',r.get('rule')...",
-  "error": "Exit code 1\nTraceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n    import json,sys;d=json.load(sys.stdin);[print(r.get('name'),'|',r.get('rule'),'|status:',r.get('status')) for r in d if 'relay' in (r.get('name') or '').lower()]\n                      ~~~~~~~~~^^^^^^^^^^^\n  File \"/usr/lib/python3.14/json/__init__.py\", line 298, in load\n    return loads(fp.read(),\n        cls=cls, object_hook=object_hook,\n        parse_float=parse_float, parse_int=parse_int,\n        parse_co...",
-  "timestamp": "2026-04-24T22:25:58.483Z",
+  "tool_input_preview": "{\"command\":\"curl -sk --max-time 10 --http1.1 -o /dev/null -w \\\"api http1: %{http_code}\\\\n\\\" https://api.relay.joshpointer.dev/health; curl -sk --max-time 10 --tlsv1.2 -o /dev/null -w \\\"api tls12: %{ht...",
+  "error": "Exit code 35\napi http1: 000\napi tls12: 000",
+  "timestamp": "2026-04-24T22:29:45.994Z",
   "retry_count": 1
 }

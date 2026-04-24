@@ -10,26 +10,23 @@ export const metadata: Metadata = {
     'Relay gives you real-time visibility into every shipment, powered by Trusted Clarity.',
 };
 
-const clerkKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ?? '';
-const clerkKeyIsReal = /^pk_(test|live)_/.test(clerkKey);
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const body = <QueryProvider>{children}</QueryProvider>;
   return (
     <html lang="en">
       <body className="font-body bg-background text-text antialiased">
-        {/* Skip-nav for keyboard / screen-reader users (a11y) */}
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-white focus:px-3 focus:py-1 focus:text-sm focus:text-primary focus:ring-2 focus:ring-accent"
         >
           Skip to main content
         </a>
-        {clerkKeyIsReal ? <ClerkProvider>{body}</ClerkProvider> : body}
+        <ClerkProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </ClerkProvider>
       </body>
     </html>
   );
