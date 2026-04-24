@@ -31,7 +31,7 @@ COPY packages/shared-types packages/shared-types/
 COPY packages/sdk packages/sdk/
 COPY apps/api apps/api/
 
-RUN pnpm install -r --offline
+RUN pnpm install -r --prefer-offline
 
 RUN pnpm --filter @relay/api prisma:generate
 RUN pnpm --filter @relay/api build

@@ -32,7 +32,7 @@ COPY packages/design-tokens packages/design-tokens/
 COPY packages/ui-core packages/ui-core/
 COPY apps/web apps/web/
 
-RUN pnpm install -r --offline
+RUN pnpm install -r --prefer-offline
 
 # Build with Next.js standalone output
 ENV NEXT_TELEMETRY_DISABLED=1
@@ -64,6 +64,6 @@ USER nodeuser
 EXPOSE 3000
 
 HEALTHCHECK --interval=30s --timeout=10s --start-period=20s --retries=3 \
-  CMD wget -qO- http://localhost:3000/api/health || exit 1
+  CMD wget -qO- http://localhost:3000/ || exit 1
 
-CMD ["node", "apps/web/.next/standalone/apps/web/server.js"]
+CMD ["node", "apps/web/server.js"]

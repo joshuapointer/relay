@@ -65,3 +65,10 @@ ios/
 .cache
 tmp
 temp
+
+# OMC ephemeral state (keep autopilot specs + plans in repo)
+.omc/state/
+.omc/sessions/
+.omc/logs/
+.omc/project-memory.json
+.claude/scheduled_tasks.lock
