@@ -4,15 +4,18 @@ import { redirect } from 'next/navigation';
 import TopNav from '@/components/TopNav';
 import { RealtimeProvider } from '@/lib/realtime';
 
+const CLERK_MOCK = process.env.NEXT_PUBLIC_CLERK_MOCK_MODE === 'true';
+
 export default async function AppLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { userId } = await auth();
-
-  if (!userId) {
-    redirect('/sign-in');
+  if (!CLERK_MOCK) {
+    const { userId } = await auth();
+    if (!userId) {
+      redirect('/sign-in');
+    }
   }
 
   return (
