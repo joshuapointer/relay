@@ -24,16 +24,24 @@ const nextConfig = {
   },
   webpack: (config, { webpack }) => {
     if (clerkMockMode) {
+      const stubClient = path.resolve(__dirname, 'lib/clerk-stub.tsx');
+      const stubServer = path.resolve(__dirname, 'lib/clerk-stub-server.tsx');
       config.plugins.push(
         new webpack.NormalModuleReplacementPlugin(
-          /^@clerk\/nextjs$/,
-          path.resolve(__dirname, 'lib/clerk-stub.tsx'),
+          /@clerk\/nextjs$/,
+          stubClient,
         ),
         new webpack.NormalModuleReplacementPlugin(
-          /^@clerk\/nextjs\/server$/,
-          path.resolve(__dirname, 'lib/clerk-stub-server.tsx'),
+          /@clerk\/nextjs\/server$/,
+          stubServer,
         ),
       );
+      config.resolve ||= {};
+      config.resolve.alias ||= {};
+      Object.assign(config.resolve.alias, {
+        '@clerk/nextjs': stubClient,
+        '@clerk/nextjs/server': stubServer,
+      });
     }
     return config;
   },
