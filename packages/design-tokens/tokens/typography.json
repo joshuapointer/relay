@@ -1,0 +1,108 @@
+{
+  "typography": {
+    "family": {
+      "header": {
+        "value": "Poppins",
+        "type": "fontFamily",
+        "comment": "Poppins — used for all headers (weights: 500/Medium, 600/SemiBold, 700/Bold)"
+      },
+      "body": {
+        "value": "Inter",
+        "type": "fontFamily",
+        "comment": "Inter — used for all body copy (weights: 400/Regular, 500/Medium)"
+      }
+    },
+    "weight": {
+      "regular": {
+        "value": 400,
+        "type": "fontWeight"
+      },
+      "medium": {
+        "value": 500,
+        "type": "fontWeight"
+      },
+      "semibold": {
+        "value": 600,
+        "type": "fontWeight"
+      },
+      "bold": {
+        "value": 700,
+        "type": "fontWeight"
+      }
+    },
+    "size": {
+      "display": {
+        "value": 36,
+        "type": "fontSize",
+        "comment": "display — 36px"
+      },
+      "h1": {
+        "value": 28,
+        "type": "fontSize",
+        "comment": "h1 — 28px"
+      },
+      "h2": {
+        "value": 22,
+        "type": "fontSize",
+        "comment": "h2 — 22px"
+      },
+      "h3": {
+        "value": 18,
+        "type": "fontSize",
+        "comment": "h3 — 18px"
+      },
+      "bodyLg": {
+        "value": 16,
+        "type": "fontSize",
+        "comment": "bodyLg — 16px"
+      },
+      "body": {
+        "value": 14,
+        "type": "fontSize",
+        "comment": "body — 14px"
+      },
+      "caption": {
+        "value": 12,
+        "type": "fontSize",
+        "comment": "caption — 12px"
+      }
+    },
+    "lineHeight": {
+      "display": {
+        "value": 44,
+        "type": "lineHeight",
+        "comment": "display line-height — 44px"
+      },
+      "h1": {
+        "value": 36,
+        "type": "lineHeight",
+        "comment": "h1 line-height — 36px"
+      },
+      "h2": {
+        "value": 30,
+        "type": "lineHeight",
+        "comment": "h2 line-height — 30px"
+      },
+      "h3": {
+        "value": 26,
+        "type": "lineHeight",
+        "comment": "h3 line-height — 26px"
+      },
+      "bodyLg": {
+        "value": 24,
+        "type": "lineHeight",
+        "comment": "bodyLg line-height — 24px"
+      },
+      "body": {
+        "value": 22,
+        "type": "lineHeight",
+        "comment": "body line-height — 22px"
+      },
+      "caption": {
+        "value": 18,
+        "type": "lineHeight",
+        "comment": "caption line-height — 18px"
+      }
+    }
+  }
+}

@@ -1,0 +1,88 @@
+<!--
+  Relay full logo — light variant (for dark / Deep Tech Blue backgrounds)
+  ViewBox: 240x48
+  Colors: White #FFFFFF wordmark + White icon + Agile Teal #00C2CB arrow/package
+  BR-10: icon on left, wordmark on right
+  BR-11 continuity verified by designer: R-tail flows into arrow line into package.
+    Bridge rule rendered in white with teal tint to maintain visibility on dark bg.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 240 48"
+  fill="none"
+  role="img"
+  aria-label="Relay"
+>
+  <title>Relay</title>
+
+  <!-- WORDMARK — white on dark backgrounds -->
+  <text
+    x="4"
+    y="36"
+    font-family="Poppins, 'Inter', system-ui, sans-serif"
+    font-weight="700"
+    font-size="32"
+    letter-spacing="-0.5"
+    fill="#FFFFFF"
+  >Relay</text>
+
+  <!-- BR-11 BRIDGE — white/teal on dark background -->
+  <line
+    x1="118" y1="22"
+    x2="132" y2="22"
+    stroke="#FFFFFF"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    opacity="0.6"
+  />
+
+  <!-- ICON — white stroke + teal accents -->
+  <g transform="translate(132, 0)" stroke-linecap="round" stroke-linejoin="round">
+
+    <!-- Main continuous R path — white -->
+    <path
+      d="M10 40
+         L10 10
+         Q10 6 14 6
+         L26 6
+         Q34 6 34 14
+         Q34 22 26 22
+         L10 22
+         L28 38"
+      stroke="#FFFFFF"
+      stroke-width="4"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      fill="none"
+    />
+
+    <!-- Arrow shaft — Agile Teal -->
+    <line
+      x1="28" y1="38"
+      x2="36" y2="38"
+      stroke="#00C2CB"
+      stroke-width="4"
+      stroke-linecap="round"
+    />
+
+    <!-- Arrowhead — Agile Teal -->
+    <polyline
+      points="32,32 40,38 32,44"
+      stroke="#00C2CB"
+      stroke-width="4"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      fill="none"
+    />
+
+    <!-- Package — Agile Teal -->
+    <rect
+      x="37" y="34"
+      width="6" height="8"
+      rx="1.5" ry="1.5"
+      stroke="#00C2CB"
+      stroke-width="3"
+      fill="none"
+    />
+  </g>
+</svg>

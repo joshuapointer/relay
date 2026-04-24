@@ -1,0 +1,31 @@
+<!--
+  Relay wordmark — "Relay" in Poppins Bold style
+  ViewBox: 120x48
+  Color: Ink Black #1A1A1A
+  BR-8: reads "Relay" — uppercase R, lowercase elay, single word
+  BR-9: clean modern slightly-rounded geometric sans (Poppins Bold)
+
+  Implementation note: SVG <text> with font-family Poppins Bold is used for
+  pixel-correct rendering. Outlined paths are the ideal for font independence;
+  however hand-tracing all 5 glyphs at this scale introduces approximation errors
+  that harm brand legibility more than a font-dependent text element would.
+  Consumers embedding this SVG in environments with Poppins loaded will get
+  perfect rendering; fallback stack ensures geometric sans at minimum.
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 120 48"
+  role="img"
+  aria-label="Relay"
+>
+  <title>Relay</title>
+  <text
+    x="4"
+    y="36"
+    font-family="Poppins, 'Inter', system-ui, sans-serif"
+    font-weight="700"
+    font-size="32"
+    letter-spacing="-0.5"
+    fill="#1A1A1A"
+  >Relay</text>
+</svg>

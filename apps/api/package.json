@@ -1,0 +1,50 @@
+{
+  "name": "@relay/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "openapi:generate": "tsx scripts/generate-openapi.ts",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev"
+  },
+  "dependencies": {
+    "@fastify/cors": "^9",
+    "@fastify/helmet": "^11",
+    "@fastify/rate-limit": "^9",
+    "@fastify/sensible": "^5",
+    "@fastify/swagger": "^8",
+    "@fastify/swagger-ui": "^4",
+    "@prisma/client": "^5",
+    "@relay/shared-types": "workspace:*",
+    "dotenv": "^16",
+    "expo-server-sdk": "^3",
+    "fastify": "^4",
+    "fastify-plugin": "^4",
+    "jose": "^5",
+    "pino": "^9",
+    "socket.io": "^4",
+    "zod": "^3",
+    "zod-to-json-schema": "^3"
+  },
+  "devDependencies": {
+    "@relay/config-eslint": "workspace:*",
+    "@relay/config-tsconfig": "workspace:*",
+    "@relay/config-vitest": "workspace:*",
+    "@types/node": "^20",
+    "@vitest/coverage-v8": "^2",
+    "msw": "^2",
+    "pino-pretty": "^11",
+    "prisma": "^5",
+    "socket.io-client": "^4",
+    "tsx": "^4",
+    "typescript": "^5",
+    "vitest": "^2"
+  }
+}

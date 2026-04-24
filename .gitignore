@@ -1,0 +1,67 @@
+# Dependencies
+node_modules
+.pnpm-store
+
+# Build outputs
+dist
+build
+.next
+out
+.expo
+
+# Turbo
+.turbo
+
+# TypeScript
+*.tsbuildinfo
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# Editor/IDE
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Testing
+coverage
+.nyc_output
+
+# Prisma
+prisma/migrations/dev.db
+
+# Expo
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build
+android/
+ios/
+
+# Next.js
+.next/cache
+
+# Vercel
+.vercel
+
+# Misc
+.cache
+tmp
+temp

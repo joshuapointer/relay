@@ -1,0 +1,20 @@
+{
+  "name": "@relay/config-eslint",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./base": "./configs/base.js",
+    "./react": "./configs/react.js",
+    "./node": "./configs/node.js",
+    "./expo": "./configs/expo.js"
+  },
+  "devDependencies": {
+    "eslint": "^9",
+    "typescript-eslint": "^8",
+    "eslint-plugin-import": "^2",
+    "eslint-config-prettier": "^9"
+  }
+}

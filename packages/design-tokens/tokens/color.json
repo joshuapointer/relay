@@ -1,0 +1,93 @@
+{
+  "color": {
+    "primary": {
+      "value": "#003B73",
+      "type": "color",
+      "comment": "Deep Tech Blue — logos, top nav, headers, primary buttons, FAB"
+    },
+    "secondary": {
+      "value": "#00C2CB",
+      "type": "color",
+      "comment": "Agile Teal — tracking route lines, accents, interactive highlights"
+    },
+    "accent": {
+      "value": "#FFB800",
+      "type": "color",
+      "comment": "Alert Amber — In Transit + delay/warning pills, non-blocking banners"
+    },
+    "success": {
+      "value": "#2ECC71",
+      "type": "color",
+      "comment": "Success Green — Delivered status ONLY"
+    },
+    "neutral": {
+      "value": "#F4F6F9",
+      "type": "color",
+      "comment": "Cloud Gray — app backgrounds, card surfaces, dividers"
+    },
+    "ink": {
+      "value": "#1A1A1A",
+      "type": "color",
+      "comment": "Ink Black — primary body copy, headings"
+    },
+    "white": {
+      "value": "#FFFFFF",
+      "type": "color"
+    },
+    "background": {
+      "value": "{color.neutral}",
+      "type": "color",
+      "comment": "App background surface"
+    },
+    "surface": {
+      "value": "{color.white}",
+      "type": "color",
+      "comment": "Card/panel surface"
+    },
+    "text": {
+      "value": "{color.ink}",
+      "type": "color",
+      "comment": "Primary text"
+    },
+    "textMuted": {
+      "value": "#6B7280",
+      "type": "color",
+      "comment": "Secondary/muted text"
+    },
+    "border": {
+      "value": "#E5E7EB",
+      "type": "color",
+      "comment": "Default border color"
+    },
+    "inTransit": {
+      "value": "{color.accent}",
+      "type": "color",
+      "comment": "In Transit status color = amber"
+    },
+    "delivered": {
+      "value": "{color.success}",
+      "type": "color",
+      "comment": "Delivered status color = success green (ONLY this status uses success green)"
+    },
+    "pending": {
+      "value": "#B38600",
+      "type": "color",
+      "comment": "Pending status — amber dim"
+    },
+    "exception": {
+      "value": "#D97706",
+      "type": "color",
+      "comment": "Exception status — amber + border tone"
+    },
+    "primaryForeground": {
+      "value": "{color.white}",
+      "type": "color",
+      "comment": "Foreground on primary (white on deep tech blue)"
+    },
+    "outForDelivery": {
+      "value": "{color.accent}",
+      "type": "color",
+      "comment": "Out for Delivery status color = accent amber"
+    }
+  }
+}

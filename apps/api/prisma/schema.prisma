@@ -1,0 +1,155 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum InternalShipmentStatus {
+  PENDING
+  IN_TRANSIT
+  OUT_FOR_DELIVERY
+  DELIVERED
+  EXCEPTION
+  RETURNED
+  UNKNOWN
+}
+
+enum NotificationType {
+  STATUS_CHANGE
+  DELAY
+  EXCEPTION
+  DELIVERED
+}
+
+enum NotificationStatus {
+  PENDING
+  SENT
+  FAILED
+}
+
+enum Platform {
+  IOS
+  ANDROID
+  WEB
+}
+
+model User {
+  id        String   @id @default(cuid())
+  clerkId   String   @unique
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  shipments     Shipment[]
+  notifications Notification[]
+  pushTokens    PushToken[]
+
+  @@index([clerkId])
+}
+
+model Carrier {
+  id            String   @id
+  name          String
+  displayName   String
+  code          String   @unique
+  webhookSecret String?
+
+  shipments Shipment[]
+}
+
+model Shipment {
+  id            String                 @id @default(cuid())
+  userId        String
+  carrierId     String
+  trackingNumber String
+  nickname      String?
+  status        InternalShipmentStatus @default(PENDING)
+  lastEventAt   DateTime?
+  eta           DateTime?
+  createdAt     DateTime               @default(now())
+  updatedAt     DateTime               @updatedAt
+
+  user          User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  carrier       Carrier         @relation(fields: [carrierId], references: [id])
+  events        TrackingEvent[]
+  notifications Notification[]
+  shareLinks    ShareLink[]
+
+  @@unique([trackingNumber, carrierId])
+  @@index([userId, status])
+}
+
+model TrackingEvent {
+  id          String                 @id @default(cuid())
+  shipmentId  String
+  occurredAt  DateTime
+  status      InternalShipmentStatus
+  description String
+  location    String?
+  rawEvent    Json
+  createdAt   DateTime               @default(now())
+
+  shipment Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+
+  @@index([shipmentId, occurredAt(sort: Desc)])
+}
+
+model Notification {
+  id          String             @id @default(cuid())
+  userId      String
+  shipmentId  String?
+  type        NotificationType
+  status      NotificationStatus
+  title       String
+  body        String
+  payload     Json
+  deliveredAt DateTime?
+  readAt      DateTime?
+  createdAt   DateTime           @default(now())
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  shipment Shipment? @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@index([userId, readAt])
+}
+
+model PushToken {
+  id        String    @id @default(cuid())
+  userId    String
+  token     String    @unique
+  platform  Platform
+  createdAt DateTime  @default(now())
+  revokedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model WebhookEvent {
+  id              String    @id @default(cuid())
+  carrierId       String
+  providerEventId String
+  signatureValid  Boolean
+  processedAt     DateTime?
+  rawPayload      Json
+  createdAt       DateTime  @default(now())
+
+  @@unique([carrierId, providerEventId])
+}
+
+model ShareLink {
+  id         String   @id @default(cuid())
+  token      String   @unique
+  shipmentId String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+
+  shipment Shipment @relation(fields: [shipmentId], references: [id], onDelete: Cascade)
+
+  @@index([shipmentId])
+}

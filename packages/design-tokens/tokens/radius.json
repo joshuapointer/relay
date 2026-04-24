@@ -1,0 +1,10 @@
+{
+  "radius": {
+    "none": { "value": 0, "type": "borderRadius" },
+    "sm": { "value": 4, "type": "borderRadius" },
+    "md": { "value": 8, "type": "borderRadius" },
+    "lg": { "value": 12, "type": "borderRadius" },
+    "xl": { "value": 16, "type": "borderRadius" },
+    "pill": { "value": 999, "type": "borderRadius" }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "name": "@relay/sdk",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./rest": {
+      "types": "./dist/client.d.ts",
+      "import": "./dist/client.js"
+    },
+    "./realtime": {
+      "types": "./dist/realtime.d.ts",
+      "import": "./dist/realtime.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@relay/shared-types": "workspace:*",
+    "socket.io-client": "^4",
+    "zod": "^3"
+  },
+  "devDependencies": {
+    "@relay/config-eslint": "workspace:*",
+    "@relay/config-tsconfig": "workspace:*",
+    "@relay/config-vitest": "workspace:*",
+    "@vitest/coverage-v8": "^2",
+    "msw": "^2",
+    "typescript": "^5.4",
+    "vitest": "^2"
+  }
+}

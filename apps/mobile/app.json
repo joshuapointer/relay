@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "Relay",
+    "slug": "relay",
+    "version": "0.0.1",
+    "orientation": "portrait",
+    "scheme": "relay",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#003B73"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.relay.app"
+    },
+    "android": {
+      "package": "com.relay.app",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#003B73"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      [
+        "expo-notifications",
+        {
+          "icon": "./assets/icon.png",
+          "color": "#003B73"
+        }
+      ]
+    ],
+    "extra": {
+      "NEXT_PUBLIC_API_URL": "",
+      "CLERK_PUBLISHABLE_KEY": "",
+      "CLERK_MOCK_MODE": true,
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "relay-mobile"
+      }
+    }
+  }
+}

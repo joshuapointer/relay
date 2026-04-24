@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Design token CSS custom properties — inlined from @relay/design-tokens/dist/tokens.css */
+:root {
+  --color-primary: #003b73;
+  --color-secondary: #00c2cb;
+  --color-accent: #ffb800;
+  --color-success: #2ecc71;
+  --color-neutral: #f4f6f9;
+  --color-ink: #1a1a1a;
+  --color-white: #ffffff;
+  --color-background: #f4f6f9;
+  --color-surface: #ffffff;
+  --color-text: #1a1a1a;
+  --color-text-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-in-transit: #ffb800;
+  --color-delivered: #2ecc71;
+  --color-pending: #b38600;
+  --color-exception: #d97706;
+  --color-primary-foreground: #ffffff;
+  --color-out-for-delivery: #ffb800;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-pill: 999px;
+}
+
+/* Poppins — heading font (vendored woff2, SIL OFL) */
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/Poppins-Medium.woff2') format('woff2');
+  unicode-range: U+0000-024F;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/Poppins-SemiBold.woff2') format('woff2');
+  unicode-range: U+0000-024F;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/Poppins-Bold.woff2') format('woff2');
+  unicode-range: U+0000-024F;
+}
+
+/* Inter — body font (vendored woff2, SIL OFL) */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/Inter-Regular.woff2') format('woff2');
+  unicode-range: U+0000-024F;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/Inter-Medium.woff2') format('woff2');
+  unicode-range: U+0000-024F;
+}

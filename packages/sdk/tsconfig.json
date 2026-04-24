@@ -1,0 +1,11 @@
+{
+  "extends": "@relay/config-tsconfig/base.json",
+  "compilerOptions": {
+    "paths": {
+      "@relay/shared-types": ["../shared-types/src/index.ts"],
+      "@relay/shared-types/*": ["../shared-types/src/*.ts"]
+    }
+  },
+  "include": ["src/**/*", "../shared-types/src/**/*"],
+  "exclude": ["node_modules", "dist"]
+}

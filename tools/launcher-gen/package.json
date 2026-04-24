@@ -1,0 +1,17 @@
+{
+  "name": "@relay/tools-launcher-gen",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Generates launcher icons and splash PNGs from the Relay brand SVG",
+  "scripts": {
+    "build": "tsc --outDir dist --rootDir src",
+    "gen": "node dist/generate.js"
+  },
+  "dependencies": {
+    "sharp": "^0.33.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.4.0"
+  }
+}

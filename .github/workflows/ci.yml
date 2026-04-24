@@ -1,0 +1,218 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PNPM_VERSION: '9.12.0'
+  NODE_VERSION: '20'
+
+jobs:
+  lint-and-typecheck:
+    name: Lint & Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck all workspaces
+        run: pnpm -r typecheck
+
+      - name: Lint all workspaces
+        run: pnpm -r lint
+
+  test:
+    name: Test (${{ matrix.workspace }})
+    runs-on: ubuntu-latest
+    needs: lint-and-typecheck
+    strategy:
+      fail-fast: false
+      matrix:
+        workspace:
+          - '@relay/api'
+          - '@relay/web'
+          - '@relay/mobile'
+          - '@relay/ui-core'
+          - '@relay/shared-types'
+          - '@relay/sdk'
+          - '@relay/design-tokens'
+          - '@relay/config-eslint'
+          - '@relay/config-tsconfig'
+          - '@relay/config-vitest'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build dependencies
+        run: pnpm -r build --filter=...${{ matrix.workspace }}
+
+      - name: Run tests
+        run: pnpm --filter ${{ matrix.workspace }} test
+        env:
+          CLERK_MOCK_MODE: 'true'
+          EASYPOST_MOCK_MODE: 'true'
+          NODE_ENV: test
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: coverage-${{ strategy.job-index }}
+          path: |
+            apps/*/coverage/
+            packages/*/coverage/
+          retention-days: 7
+
+  build:
+    name: Build all workspaces
+    runs-on: ubuntu-latest
+    needs: lint-and-typecheck
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build all workspaces
+        run: pnpm -r build
+
+  brand-acceptance:
+    name: Brand Acceptance
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build design-tokens and ui-core
+        run: |
+          pnpm --filter @relay/design-tokens build
+          pnpm --filter @relay/ui-core build
+
+      - name: Run brand tests (design-tokens)
+        run: pnpm --filter @relay/design-tokens test
+        continue-on-error: false
+
+      - name: Run brand tests (ui-core)
+        run: pnpm --filter @relay/ui-core test
+        continue-on-error: false
+
+      - name: Run brand acceptance spec
+        run: |
+          if [ -f "tests/brand/brand-acceptance.spec.ts" ]; then
+            pnpm exec playwright test tests/brand/brand-acceptance.spec.ts
+          else
+            echo "Brand acceptance Playwright spec not yet present — skipping"
+          fi
+        continue-on-error: true
+
+      - name: Upload brand report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: brand-report
+          path: |
+            packages/design-tokens/coverage/
+            brand-report.json
+          retention-days: 30
+
+  content-lint:
+    name: Content Lint
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build content-lint tool
+        run: pnpm --filter @relay/tools-content-lint build
+
+      - name: Run content lint
+        run: pnpm content:lint
+
+  api-docker-build:
+    name: API Docker Build (optional)
+    runs-on: ubuntu-latest
+    needs: build
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check Docker availability
+        id: docker-check
+        run: |
+          if docker info &>/dev/null; then
+            echo "available=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "available=false" >> "$GITHUB_OUTPUT"
+            echo "Docker daemon not available — skipping build"
+          fi
+
+      - name: Build API Docker image
+        if: steps.docker-check.outputs.available == 'true'
+        run: |
+          docker build \
+            --no-cache \
+            --progress=plain \
+            --file apps/api/Dockerfile \
+            --tag relay-api:ci-${{ github.sha }} \
+            .

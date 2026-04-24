@@ -1,0 +1,38 @@
+# CODEOWNERS — Relay monorepo
+# Replace @owner with real GitHub usernames or team slugs.
+# Docs: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Global fallback
+* @owner
+
+# API
+/apps/api/ @owner
+
+# Web
+/apps/web/ @owner
+
+# Mobile
+/apps/mobile/ @owner
+
+# Design system / tokens
+/packages/design-tokens/ @owner
+/packages/ui-core/ @owner
+
+# Shared types and SDK (breaking changes require review)
+/packages/shared-types/ @owner
+/packages/sdk/ @owner
+
+# Infrastructure / DevOps
+/.github/ @owner
+/infrastructure/ @owner
+/apps/api/Dockerfile @owner
+/apps/api/fly.toml @owner
+/apps/web/vercel.json @owner
+/apps/mobile/eas.json @owner
+/docker-compose.yml @owner
+/tools/content-lint/ @owner
+
+# Config packages
+/packages/config-eslint/ @owner
+/packages/config-tsconfig/ @owner
+/packages/config-vitest/ @owner

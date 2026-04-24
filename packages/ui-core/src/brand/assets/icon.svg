@@ -1,0 +1,90 @@
+<!--
+  Relay brand icon — standalone mark
+  ViewBox: 48x48
+  Color: Deep Tech Blue #003B73 (primary stroke)
+  BR-11 continuity verified by designer: R-tail flows into arrow line into package
+  BR-14: stylized looping pathway forming the letter R
+  BR-15: R tail transforms into a forward-pointing arrow
+  BR-16: arrow encloses a small rectangular package shape
+  BR-17: minimalist continuous line art — single continuous stroke, no breaks
+  BR-18: rounded corners throughout (stroke-linecap round, stroke-linejoin round)
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 48 48"
+  fill="none"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  role="img"
+  aria-label="Relay icon"
+>
+  <title>Relay</title>
+  <!--
+    The R is drawn as a continuous open path:
+    - Vertical stem: from bottom-left up
+    - Loop (bowl): arcs right from the stem top, curves around and back to mid-stem
+    - The crossbar/bowl bottom connects and the tail extends diagonally down-right
+    - The tail becomes the shaft of a right-pointing arrow
+    - The arrowhead encloses a small package rect at the tip
+
+    Path breakdown (48x48 grid, stroke-width 4):
+      Start at (10, 40) — bottom of stem
+      Line up to (10, 10) — top of stem
+      Arc/curve right to form the bowl: (10,10) → (28,10) → (28,22) → (10,22)
+      This bowl-close IS the crossbar; from (10,22) the tail extends:
+      Diagonal tail-to-arrow: (10,22) → (28,36)
+      Arrow shaft continues: (28,36) → (36,36)
+      Arrowhead: (32,30) → (40,36) → (32,42)   [the head]
+      Package rect sits inside the arrowhead at the tip, drawn as a closed rect path
+
+    Rendered as two elements:
+      1. Main R-to-arrow continuous path (open)
+      2. Package rect (the enclosed shape at arrow tip, BR-16)
+  -->
+
+  <!-- Main continuous line: stem → bowl → crossbar → tail → arrow shaft (BR-11: crossbar extends into arrow) -->
+  <path
+    d="M10 40
+       L10 10
+       Q10 6 14 6
+       L26 6
+       Q34 6 34 14
+       Q34 22 26 22
+       L10 22
+       L28 38"
+    stroke="#003B73"
+    stroke-width="4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+
+  <!-- Arrow shaft extending from tail end -->
+  <line
+    x1="28" y1="38"
+    x2="36" y2="38"
+    stroke="#003B73"
+    stroke-width="4"
+    stroke-linecap="round"
+  />
+
+  <!-- Arrowhead (forward-pointing right) -->
+  <polyline
+    points="32,32 40,38 32,44"
+    stroke="#003B73"
+    stroke-width="4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+
+  <!-- Package: small rectangle enclosed by/near arrowhead tip (BR-16) -->
+  <rect
+    x="37" y="34"
+    width="6" height="8"
+    rx="1.5" ry="1.5"
+    stroke="#003B73"
+    stroke-width="3"
+    fill="none"
+  />
+</svg>

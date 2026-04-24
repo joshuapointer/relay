@@ -1,0 +1,65 @@
+<!--
+  Relay brand icon — light variant (for placement on Deep Tech Blue tile)
+  ViewBox: 48x48
+  Colors: white stroke + Agile Teal #00C2CB accent on arrow + package (BR-19..BR-21)
+  BR-11 continuity verified by designer: R-tail flows into arrow line into package
+  BR-17: minimalist continuous line art
+  BR-18: rounded corners throughout
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 48 48"
+  fill="none"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  role="img"
+  aria-label="Relay icon"
+>
+  <title>Relay</title>
+
+  <!-- Main continuous line: stem → bowl → crossbar → tail (white) -->
+  <path
+    d="M10 40
+       L10 10
+       Q10 6 14 6
+       L26 6
+       Q34 6 34 14
+       Q34 22 26 22
+       L10 22
+       L28 38"
+    stroke="#FFFFFF"
+    stroke-width="4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+
+  <!-- Arrow shaft — Agile Teal accent (BR-21) -->
+  <line
+    x1="28" y1="38"
+    x2="36" y2="38"
+    stroke="#00C2CB"
+    stroke-width="4"
+    stroke-linecap="round"
+  />
+
+  <!-- Arrowhead — Agile Teal accent (BR-21) -->
+  <polyline
+    points="32,32 40,38 32,44"
+    stroke="#00C2CB"
+    stroke-width="4"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
+
+  <!-- Package — Agile Teal accent (BR-21) -->
+  <rect
+    x="37" y="34"
+    width="6" height="8"
+    rx="1.5" ry="1.5"
+    stroke="#00C2CB"
+    stroke-width="3"
+    fill="none"
+  />
+</svg>

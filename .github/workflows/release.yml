@@ -1,0 +1,124 @@
+name: Release
+
+# Triggered on semver tags (e.g. v1.0.0, v1.2.3-beta.1)
+# This workflow documents the release plan; actual publish steps are stubs
+# until the team configures npm registry / Fly / Vercel tokens.
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+      - 'v[0-9]+.[0-9]+.[0-9]+-*'
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  PNPM_VERSION: '9.12.0'
+  NODE_VERSION: '20'
+
+jobs:
+  validate:
+    name: Validate release tag
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.tag.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Extract version from tag
+        id: tag
+        run: echo "version=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+  build-and-test:
+    name: Full build + test
+    needs: validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm -r typecheck
+
+      - name: Lint
+        run: pnpm -r lint
+
+      - name: Test
+        run: pnpm -r test
+        env:
+          CLERK_MOCK_MODE: 'true'
+          EASYPOST_MOCK_MODE: 'true'
+
+      - name: Build
+        run: pnpm -r build
+
+  # STUB: API deployment to Fly.io
+  # Uncomment and configure FLY_API_TOKEN secret to enable
+  deploy-api:
+    name: Deploy API (stub)
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy stub
+        run: |
+          echo "Release ${{ needs.validate.outputs.version }} — API deploy to Fly.io"
+          echo "TODO: Configure FLY_API_TOKEN secret and uncomment fly deploy step"
+          echo "Command would be: fly deploy --app relay-api --config apps/api/fly.toml"
+
+  # STUB: Web deployment to Vercel
+  # Uncomment and configure VERCEL_TOKEN secret to enable
+  deploy-web:
+    name: Deploy Web (stub)
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy stub
+        run: |
+          echo "Release ${{ needs.validate.outputs.version }} — Web deploy to Vercel"
+          echo "TODO: Configure VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID secrets"
+          echo "Command would be: vercel --prod --token \$VERCEL_TOKEN"
+
+  # STUB: Mobile EAS build
+  # Real builds require Apple Developer and Google Play Console accounts
+  build-mobile:
+    name: Mobile EAS Build (stub)
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build stub
+        run: |
+          echo "Release ${{ needs.validate.outputs.version }} — Mobile EAS build"
+          echo "TODO: Configure EXPO_TOKEN secret and Apple/Google credentials"
+          echo "Command would be: eas build --profile production --platform all --non-interactive"
+
+  create-release:
+    name: Create GitHub Release
+    needs: [deploy-api, deploy-web, build-mobile]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            --title "Relay ${{ github.ref_name }}" \
+            --generate-notes \
+            --draft

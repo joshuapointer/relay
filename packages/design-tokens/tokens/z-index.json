@@ -1,0 +1,9 @@
+{
+  "zIndex": {
+    "base": { "value": 0, "type": "other" },
+    "card": { "value": 10, "type": "other" },
+    "overlay": { "value": 100, "type": "other" },
+    "modal": { "value": 200, "type": "other" },
+    "toast": { "value": 300, "type": "other" }
+  }
+}

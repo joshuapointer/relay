@@ -1,0 +1,102 @@
+<!--
+  Relay full logo — icon + wordmark horizontal lockup
+  ViewBox: 240x48
+  Colors: Deep Tech Blue #003B73 icon + Ink Black #1A1A1A wordmark
+  BR-10: icon on left, wordmark on right
+  BR-11 continuity verified by designer: R-tail flows into arrow line into package.
+    In the full lockup, the wordmark R's crossbar visually extends via a thin
+    horizontal rule that bridges rightward into the icon stem — providing the
+    continuous horizontal lead-in described in BR-11.
+  BR-12: clear space = height of lowercase 'e' (~22px at this scale) on all sides
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 240 48"
+  fill="none"
+  role="img"
+  aria-label="Relay"
+>
+  <title>Relay</title>
+
+  <!-- =====================================================================
+       WORDMARK — left side, x-offset 0, "Relay" in Poppins Bold #1A1A1A
+       The R's crossbar sits at approximately y=22 in the 48px tall text block.
+       ===================================================================== -->
+  <text
+    x="4"
+    y="36"
+    font-family="Poppins, 'Inter', system-ui, sans-serif"
+    font-weight="700"
+    font-size="32"
+    letter-spacing="-0.5"
+    fill="#1A1A1A"
+  >Relay</text>
+
+  <!-- =====================================================================
+       BR-11 BRIDGE: thin horizontal rule extending from wordmark R crossbar
+       into the icon, creating visual continuity between wordmark and icon.
+       Positioned at y=22 (R crossbar height), spanning from wordmark right
+       edge (~120px) to icon left edge (130px).
+       ===================================================================== -->
+  <line
+    x1="118" y1="22"
+    x2="132" y2="22"
+    stroke="#003B73"
+    stroke-width="1.5"
+    stroke-linecap="round"
+    opacity="0.6"
+  />
+
+  <!-- =====================================================================
+       ICON — right side, translated to x=132, centered vertically in 48px
+       All icon coordinates are offset by +132 on x axis.
+       ===================================================================== -->
+  <g transform="translate(132, 0)" stroke-linecap="round" stroke-linejoin="round">
+
+    <!-- Main continuous line: stem → bowl → crossbar → tail (BR-11, BR-17) -->
+    <path
+      d="M10 40
+         L10 10
+         Q10 6 14 6
+         L26 6
+         Q34 6 34 14
+         Q34 22 26 22
+         L10 22
+         L28 38"
+      stroke="#003B73"
+      stroke-width="4"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      fill="none"
+    />
+
+    <!-- Arrow shaft -->
+    <line
+      x1="28" y1="38"
+      x2="36" y2="38"
+      stroke="#003B73"
+      stroke-width="4"
+      stroke-linecap="round"
+    />
+
+    <!-- Arrowhead -->
+    <polyline
+      points="32,32 40,38 32,44"
+      stroke="#003B73"
+      stroke-width="4"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      fill="none"
+    />
+
+    <!-- Package (BR-16) -->
+    <rect
+      x="37" y="34"
+      width="6" height="8"
+      rx="1.5" ry="1.5"
+      stroke="#003B73"
+      stroke-width="3"
+      fill="none"
+    />
+  </g>
+</svg>

@@ -1,0 +1,20 @@
+{
+  "name": "@relay/tools-content-lint",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "lint": "tsx src/cli.ts",
+    "build": "tsc --project tsconfig.json",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@relay/config-tsconfig": "workspace:*",
+    "@relay/config-vitest": "workspace:*",
+    "@types/node": "^20",
+    "tsx": "^4",
+    "typescript": "^5",
+    "vitest": "^2"
+  }
+}

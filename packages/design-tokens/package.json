@@ -1,0 +1,43 @@
+{
+  "name": "@relay/design-tokens",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./web": {
+      "types": "./dist/tailwind-theme.d.ts",
+      "import": "./dist/tailwind-theme.js",
+      "require": "./dist/tailwind-theme.cjs"
+    },
+    "./native": {
+      "types": "./dist/native.d.ts",
+      "import": "./dist/native.js",
+      "require": "./dist/native.cjs"
+    },
+    "./css": {
+      "import": "./src/css.js",
+      "require": "./src/css.cjs"
+    }
+  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "node style-dictionary.config.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "devDependencies": {
+    "@relay/config-eslint": "workspace:*",
+    "@types/node": "^20",
+    "style-dictionary": "^4.4.0",
+    "typescript": "^5.4",
+    "vitest": "^2.1.9"
+  }
+}

@@ -1,0 +1,24 @@
+<!--
+  Relay wordmark — "Relay" in Poppins Bold style — light variant
+  ViewBox: 120x48
+  Color: White #FFFFFF (for placement on dark/Deep Tech Blue backgrounds)
+  BR-8: reads "Relay" — uppercase R, lowercase elay, single word
+  BR-9: clean modern slightly-rounded geometric sans (Poppins Bold)
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 120 48"
+  role="img"
+  aria-label="Relay"
+>
+  <title>Relay</title>
+  <text
+    x="4"
+    y="36"
+    font-family="Poppins, 'Inter', system-ui, sans-serif"
+    font-weight="700"
+    font-size="32"
+    letter-spacing="-0.5"
+    fill="#FFFFFF"
+  >Relay</text>
+</svg>

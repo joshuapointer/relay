@@ -1,0 +1,48 @@
+{
+  "generatedAt": "2026-04-22T08:29:39Z",
+  "svgSource": "packages/ui-core/src/brand/assets/icon-light.svg",
+  "files": [
+    {
+      "path": "apps/mobile/assets/icon.png",
+      "width": 1024,
+      "height": 1024,
+      "sizeBytes": 18795
+    },
+    {
+      "path": "apps/mobile/assets/adaptive-icon.png",
+      "width": 1024,
+      "height": 1024,
+      "sizeBytes": 14760
+    },
+    {
+      "path": "apps/mobile/assets/splash.png",
+      "width": 1242,
+      "height": 2436,
+      "sizeBytes": 24655
+    },
+    {
+      "path": "apps/mobile/assets/favicon.png",
+      "width": 48,
+      "height": 48,
+      "sizeBytes": 788
+    },
+    {
+      "path": "apps/web/public/icon-192.png",
+      "width": 192,
+      "height": 192,
+      "sizeBytes": 2570
+    },
+    {
+      "path": "apps/web/public/icon-512.png",
+      "width": 512,
+      "height": 512,
+      "sizeBytes": 7081
+    },
+    {
+      "path": "apps/web/public/apple-touch-icon.png",
+      "width": 180,
+      "height": 180,
+      "sizeBytes": 1866
+    }
+  ]
+}

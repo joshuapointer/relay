@@ -1,0 +1,57 @@
+# Fly.io deployment configuration for @relay/api
+# Deploy with: fly deploy --app relay-api
+# Secrets: fly secrets set DATABASE_URL=... CLERK_SECRET_KEY=... etc.
+
+app = "relay-api"
+primary_region = "sjc"
+
+[build]
+  dockerfile = "apps/api/Dockerfile"
+  # Build context must be set to repo root:
+  # fly deploy --dockerignore-from-gitignore
+
+[env]
+  PORT = "4000"
+  NODE_ENV = "production"
+
+[http_service]
+  internal_port = 4000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 1
+
+  [http_service.concurrency]
+    type = "connections"
+    hard_limit = 1000
+    soft_limit = 800
+
+[[http_service.checks]]
+  grace_period = "15s"
+  interval = "30s"
+  method = "GET"
+  path = "/health"
+  port = 4000
+  timeout = "10s"
+
+[[vm]]
+  count = 2
+  size = "shared-cpu-1x"
+  memory = "512mb"
+
+[mounts]
+  # No persistent mounts needed — DB is external (Fly Postgres or Neon)
+
+# Required secrets (set via `fly secrets set KEY=VALUE`):
+# DATABASE_URL          — Postgres connection string (Fly Postgres or Neon)
+# CLERK_SECRET_KEY      — Clerk backend secret key
+# CLERK_PUBLISHABLE_KEY — Clerk publishable key
+# CLERK_JWKS_URL        — Clerk JWKS endpoint
+# CLERK_ISSUER          — Clerk issuer URL
+# EASYPOST_API_KEY      — EasyPost API key
+# EASYPOST_WEBHOOK_SECRET — EasyPost webhook signing secret
+# EXPO_ACCESS_TOKEN     — Expo push notification token
+# SOCKET_IO_REDIS_URL   — Redis connection string (Upstash or Fly Redis)
+# SENTRY_DSN            — Sentry DSN for error tracking
+# CORS_ORIGIN           — Allowed CORS origin (e.g. https://relay.app)
+# PUBLIC_BASE_URL       — Public base URL for share links
