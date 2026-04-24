@@ -1,8 +1,9 @@
 # syntax=docker/dockerfile:1
 # ── Stage 1: fetch dependencies ──────────────────────────────────────────────
 FROM node:20-alpine AS deps
-LABEL org.opencontainers.image.source="https://github.com/relay-app/relay"
+LABEL org.opencontainers.image.source="https://github.com/joshuapointer/relay"
 
+RUN apk add --no-cache openssl
 RUN corepack enable
 
 WORKDIR /app
@@ -40,9 +41,10 @@ RUN pnpm --filter @relay/api build
 
 # ── Stage 3: runtime ──────────────────────────────────────────────────────────
 FROM node:20-alpine AS runtime
-LABEL org.opencontainers.image.source="https://github.com/relay-app/relay"
+LABEL org.opencontainers.image.source="https://github.com/joshuapointer/relay"
 LABEL org.opencontainers.image.version="0.1.0"
 
+RUN apk add --no-cache openssl
 RUN corepack enable
 
 # Create non-root user
