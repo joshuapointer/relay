@@ -59,7 +59,6 @@ COPY --from=build --chown=nodeuser:nodejs /app/apps/api/node_modules ./apps/api/
 
 # Copy prisma client artifacts
 COPY --from=build --chown=nodeuser:nodejs /app/apps/api/prisma ./apps/api/prisma
-COPY --from=build --chown=nodeuser:nodejs /app/node_modules/.pnpm/@prisma+client@5.22.0/node_modules/@prisma/client /app/node_modules/.pnpm/@prisma+client@5.22.0/node_modules/@prisma/client 2>/dev/null || true
 
 USER nodeuser
 
