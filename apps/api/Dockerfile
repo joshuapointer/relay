@@ -26,6 +26,7 @@ FROM deps AS build
 WORKDIR /app
 
 # Copy full source for packages the API depends on
+COPY tsconfig.base.json ./
 COPY packages/config-tsconfig packages/config-tsconfig/
 COPY packages/shared-types packages/shared-types/
 COPY packages/sdk packages/sdk/
