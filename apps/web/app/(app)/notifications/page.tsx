@@ -1,6 +1,7 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
 import { EmptyState } from '@/components/EmptyState';
@@ -20,6 +21,7 @@ function formatWhen(iso: string): string {
 export default function NotificationsPage() {
   const sdk = useSdk();
   const qc = useQueryClient();
+  const router = useRouter();
   const [actionError, setActionError] = useState<string | null>(null);
 
   const { data, isLoading, isError, refetch } = useQuery({
@@ -95,9 +97,10 @@ export default function NotificationsPage() {
                 <button
                   type="button"
                   onClick={() => {
-                    if (unread) {
-                      setActionError(null);
-                      markRead.mutate(n.id);
+                    setActionError(null);
+                    if (unread) markRead.mutate(n.id);
+                    if (n.shipmentId != null) {
+                      router.push(`/shipments/${n.shipmentId}`);
                     }
                   }}
                   className={[
