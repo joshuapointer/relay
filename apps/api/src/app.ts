@@ -106,9 +106,11 @@ export async function buildApp(opts: BuildAppOptions = {}): Promise<FastifyInsta
       ],
     },
   });
-  await app.register(swaggerUI, {
-    routePrefix: '/docs',
-  });
+  if (process.env['NODE_ENV'] !== 'production') {
+    await app.register(swaggerUI, {
+      routePrefix: '/docs',
+    });
+  }
 
   // Prisma decorator (test-injectable)
   const prisma = opts.prisma ?? defaultPrisma;
