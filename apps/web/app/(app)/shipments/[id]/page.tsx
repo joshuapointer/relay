@@ -2,6 +2,7 @@
 
 import { StatusPill } from '@relay/ui-core';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -43,10 +44,12 @@ export default function ShipmentDetailPage({ params }: PageProps) {
   // Subscribe to real-time updates; invalidates query on shipment:updated
   useShipmentSubscription(id);
 
+  const { data: session, status: sessionStatus } = useSession();
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['shipment', id],
     queryFn: () => sdk.shipments.get(id),
     refetchInterval: 30_000,
+    enabled: sessionStatus === 'authenticated' && Boolean(session?.accessToken),
   });
 
   const deleteMutation = useMutation({
