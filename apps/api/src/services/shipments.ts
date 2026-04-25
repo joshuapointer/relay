@@ -217,9 +217,9 @@ export class ShipmentsService {
     }
     if (existing && existing.userId !== userId) {
       throw new ShipmentError(
-        'Shipment with this tracking number already exists',
-        409,
-        'CONFLICT'
+        'Invalid tracking number',
+        400,
+        'INVALID_TRACKING_NUMBER'
       );
     }
 

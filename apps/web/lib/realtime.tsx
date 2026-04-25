@@ -10,7 +10,7 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useRef,
+  useState,
   type ReactNode,
 } from 'react';
 
@@ -27,29 +27,31 @@ export interface RealtimeProviderProps {
 export function RealtimeProvider({ children }: RealtimeProviderProps) {
   const { data: session } = useSession();
   const token = session?.accessToken ?? null;
-  const realtimeRef = useRef<RelayRealtime | null>(null);
+  const [rt, setRt] = useState<RelayRealtime | null>(null);
 
   useEffect(() => {
-    const rt = createRelayRealtime({
+    const instance = createRelayRealtime({
       url: process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001',
       getAuthToken: async () => token,
     });
 
-    realtimeRef.current = rt;
+    let cancelled = false;
 
-    // Connect — ignore connection errors in dev (API may not be running)
-    rt.connect().catch(() => {
+    instance.connect().then(() => {
+      if (!cancelled) setRt(instance);
+    }).catch(() => {
       // Graceful degradation: polling fallback via refetchInterval on queries
     });
 
     return () => {
-      rt.disconnect();
-      realtimeRef.current = null;
+      cancelled = true;
+      instance.disconnect();
+      setRt(null);
     };
   }, [token]);
 
   return (
-    <RealtimeContext.Provider value={realtimeRef.current}>
+    <RealtimeContext.Provider value={rt}>
       {children}
     </RealtimeContext.Provider>
   );
@@ -69,14 +71,13 @@ export function useShipmentSubscription(shipmentId: string) {
   }, [queryClient, shipmentId]);
 
   useEffect(() => {
-    if (rt === null || !rt.isConnected()) return;
+    if (rt === null) return;
 
-    rt.subscribe(shipmentId);
-    // The handler receives the updated shipment payload but we only need to
-    // invalidate — wrap to satisfy the exact callback signature.
     const handler = (_payload: ShipmentUpdatedPayload) => {
       invalidate();
     };
+
+    rt.subscribe(shipmentId);
     rt.on('shipment:updated', handler);
 
     return () => {

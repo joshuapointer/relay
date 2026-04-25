@@ -48,6 +48,11 @@ const authPluginImpl: FastifyPluginAsync<AuthPluginOptions> = async (
     throw new Error('Refusing to start: CLERK_MOCK_MODE=true in production');
   }
 
+  const audience = process.env['CLERK_AUDIENCE'];
+  if (!audience && process.env['NODE_ENV'] === 'production') {
+    throw new Error('CLERK_AUDIENCE env var is required in production');
+  }
+
   fastify.decorateRequest('user', null);
   fastify.decorateRequest('auth', null);
 
@@ -71,7 +76,7 @@ const authPluginImpl: FastifyPluginAsync<AuthPluginOptions> = async (
           localPublicKey: opts.publicKey,
           jwksUrl: opts.jwksUrl ?? process.env['CLERK_JWKS_URL'],
           issuer: opts.issuer ?? process.env['CLERK_ISSUER'],
-          audience: process.env['CLERK_AUDIENCE'],
+          audience,
         });
         const prisma = (fastify as unknown as { prisma: PrismaClient }).prisma;
         const user = await findOrCreateUser(prisma, {

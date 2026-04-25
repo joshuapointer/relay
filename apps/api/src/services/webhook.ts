@@ -245,6 +245,7 @@ export async function processWebhookEvent(
 
   // Push broadcast + notification
   const svc = new ShipmentsService(prisma, getEasyPostAdapter());
+  let processingError = false;
   try {
     const detail = await svc.getShipment(shipment.id, shipment.userId);
     await broadcastShipmentUpdate(app, shipment.userId, detail);
@@ -270,9 +271,12 @@ export async function processWebhookEvent(
       });
     }
   } catch {
+    processingError = true;
     webhookBreaker.fail();
   }
 
-  webhookBreaker.success();
+  if (!processingError) {
+    webhookBreaker.success();
+  }
   return { outcome: 'accepted', providerEventId, shipmentId: updated.id };
 }
