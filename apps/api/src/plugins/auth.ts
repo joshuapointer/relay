@@ -81,6 +81,10 @@ const authPluginImpl: FastifyPluginAsync<AuthPluginOptions> = async (
         request.user = user;
         request.auth = verified;
       } catch (err) {
+        request.log.warn(
+          { err: (err as Error).message, name: (err as Error).name },
+          'auth verify failed',
+        );
         await reply.status(401).send({
           error: {
             code: 'UNAUTHENTICATED',
