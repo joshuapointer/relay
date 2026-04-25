@@ -132,6 +132,20 @@ export class EasyPostAdapter {
     };
   }
 
+  private synthTracker(
+    trackingCode: string,
+    carrierCode: string | undefined,
+  ): NormalizedTracker {
+    return {
+      providerTrackerId: `mock_${trackingCode}`,
+      carrierCode: (carrierCode ?? 'USPS').toUpperCase(),
+      status: 'PENDING',
+      lastEventAt: null,
+      eta: null,
+      events: [],
+    };
+  }
+
   private headers(): HeadersInit {
     const key = this.apiKey;
     if (!key && process.env['NODE_ENV'] === 'production') {
@@ -147,6 +161,9 @@ export class EasyPostAdapter {
   async createTracker(input: CreateTrackerInput): Promise<NormalizedTracker> {
     if (this.breaker.isOpen) {
       throw new AdapterCircuitOpenError();
+    }
+    if (!this.isLive) {
+      return this.synthTracker(input.trackingCode, input.carrierCode);
     }
     try {
       const res = await this.fetchImpl(`${EASYPOST_API}/trackers`, {
@@ -179,6 +196,9 @@ export class EasyPostAdapter {
 
   async getTracker(providerTrackerId: string): Promise<NormalizedTracker> {
     if (this.breaker.isOpen) throw new AdapterCircuitOpenError();
+    if (!this.isLive) {
+      return this.synthTracker(providerTrackerId, undefined);
+    }
     try {
       const res = await this.fetchImpl(`${EASYPOST_API}/trackers/${providerTrackerId}`, {
         headers: this.headers(),
@@ -200,6 +220,9 @@ export class EasyPostAdapter {
 
   async refreshTracker(providerTrackerId: string): Promise<NormalizedTracker> {
     if (this.breaker.isOpen) throw new AdapterCircuitOpenError();
+    if (!this.isLive) {
+      return this.synthTracker(providerTrackerId, undefined);
+    }
     try {
       const res = await this.fetchImpl(
         `${EASYPOST_API}/trackers/${providerTrackerId}/refresh`,
