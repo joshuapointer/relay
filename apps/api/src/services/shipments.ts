@@ -197,7 +197,10 @@ export class ShipmentsService {
       );
     }
 
-    const carrierCode = input.carrierCode?.toUpperCase() ?? tracker.carrierCode;
+    const inputCarrier = input.carrierCode?.trim();
+    const carrierCode = inputCarrier && inputCarrier.length > 0
+      ? inputCarrier.toUpperCase()
+      : tracker.carrierCode;
     const carrier = await ensureCarrier(this.prisma, carrierCode);
 
     const existing = await this.prisma.shipment.findUnique({

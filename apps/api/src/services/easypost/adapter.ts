@@ -136,9 +136,10 @@ export class EasyPostAdapter {
     trackingCode: string,
     carrierCode: string | undefined,
   ): NormalizedTracker {
+    const code = carrierCode && carrierCode.trim().length > 0 ? carrierCode : 'USPS';
     return {
       providerTrackerId: `mock_${trackingCode}`,
-      carrierCode: (carrierCode ?? 'USPS').toUpperCase(),
+      carrierCode: code.toUpperCase(),
       status: 'PENDING',
       lastEventAt: null,
       eta: null,
