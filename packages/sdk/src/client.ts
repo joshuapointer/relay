@@ -94,6 +94,7 @@ export interface RelayClient {
     update(id: string, input: UpdateShipmentInput): Promise<Shipment>;
     delete(id: string): Promise<void>;
     createShareLink(id: string, input?: CreateShareLinkInput): Promise<ShareLinkResponse>;
+    refresh(id: string): Promise<ShipmentDetail>;
   };
   share: {
     get(token: string): Promise<PublicShipmentView>;
@@ -193,6 +194,11 @@ export function createRelayClient(options: RelayClientOptions): RelayClient {
           input ?? {},
         );
         return parseResponse(res, ShareLinkResponseSchema);
+      },
+
+      async refresh(id) {
+        const res = await request('POST', `/v1/shipments/${encodeURIComponent(id)}/refresh`);
+        return parseResponse(res, ShipmentDetailSchema);
       },
     },
 

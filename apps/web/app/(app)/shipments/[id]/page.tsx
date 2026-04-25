@@ -76,6 +76,13 @@ export default function ShipmentDetailPage({ params }: PageProps) {
     },
   });
 
+  const refreshMutation = useMutation({
+    mutationFn: () => sdk.shipments.refresh(id),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['shipment', id] });
+    },
+  });
+
   const updateMutation = useMutation({
     mutationFn: (nickname: string) => sdk.shipments.update(id, { nickname }),
     onSuccess: () => {
@@ -214,18 +221,26 @@ export default function ShipmentDetailPage({ params }: PageProps) {
           )}
 
           {/* Actions */}
-          <div className="mb-6 flex gap-3">
+          <div className="mb-6 flex gap-2">
+            <button
+              type="button"
+              onClick={() => { refreshMutation.mutate(); }}
+              disabled={refreshMutation.isPending}
+              className="flex-1 rounded-md border border-border bg-surface px-3 py-2 font-body text-sm font-medium text-ink transition-colors hover:bg-neutral focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 disabled:opacity-50"
+            >
+              {refreshMutation.isPending ? 'Refreshing…' : 'Refresh'}
+            </button>
             <button
               type="button"
               onClick={() => { setShareOpen(true); }}
-              className="flex-1 rounded-md border border-border bg-surface px-4 py-2 font-body text-sm font-medium text-ink transition-colors hover:bg-neutral focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
+              className="flex-1 rounded-md border border-border bg-surface px-3 py-2 font-body text-sm font-medium text-ink transition-colors hover:bg-neutral focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
             >
               Share
             </button>
             <button
               type="button"
               onClick={() => { setConfirmDelete(true); }}
-              className="flex-1 rounded-md border border-exception/40 bg-surface px-4 py-2 font-body text-sm font-medium text-exception transition-colors hover:bg-exception/5 focus:outline-none focus:ring-2 focus:ring-exception focus:ring-offset-2"
+              className="flex-1 rounded-md border border-exception/40 bg-surface px-3 py-2 font-body text-sm font-medium text-exception transition-colors hover:bg-exception/5 focus:outline-none focus:ring-2 focus:ring-exception focus:ring-offset-2"
             >
               Delete
             </button>
