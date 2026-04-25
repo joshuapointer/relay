@@ -12,6 +12,20 @@ import { SkeletonList } from '@/components/SkeletonCard';
 import { useSdk } from '@/hooks/useSdk';
 import { useShipmentSubscription } from '@/lib/realtime';
 
+function carrierTrackingUrl(carrierCode: string, trackingNumber: string): string | null {
+  const urls: Record<string, string> = {
+    USPS: `https://tools.usps.com/go/TrackConfirmAction?tLabels=${trackingNumber}`,
+    UPS: `https://www.ups.com/track?tracknum=${trackingNumber}`,
+    FEDEX: `https://www.fedex.com/fedextrack/?trknbr=${trackingNumber}`,
+    DHL: `https://www.dhl.com/en/express/tracking.html?AWB=${trackingNumber}`,
+    DHLEXPRESS: `https://www.dhl.com/en/express/tracking.html?AWB=${trackingNumber}`,
+    ONTRAC: `https://www.ontrac.com/trackingresults.asp?tracking_number=${trackingNumber}`,
+    LASERSHIP: `https://www.lasership.com/track/${trackingNumber}`,
+    AMAZON: `https://www.amazon.com/progress-tracker/package/?trackingId=${trackingNumber}`,
+  };
+  return urls[carrierCode] ?? null;
+}
+
 interface PageProps {
   params: { id: string };
 }
@@ -40,6 +54,8 @@ export default function ShipmentDetailPage({ params }: PageProps) {
   const [shareOpen, setShareOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [editingNickname, setEditingNickname] = useState(false);
+  const [nicknameInput, setNicknameInput] = useState('');
 
   // Subscribe to real-time updates; invalidates query on shipment:updated
   useShipmentSubscription(id);
@@ -57,6 +73,14 @@ export default function ShipmentDetailPage({ params }: PageProps) {
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['shipments'] });
       router.push('/dashboard');
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: (nickname: string) => sdk.shipments.update(id, { nickname }),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['shipment', id] });
+      setEditingNickname(false);
     },
   });
 
@@ -96,10 +120,56 @@ export default function ShipmentDetailPage({ params }: PageProps) {
       <div id="main-content" className="flex h-[calc(100vh-56px)] flex-col md:flex-row">
         {/* Info panel — 40% width, Cloud Gray background (BR-30, BR-32) */}
         <div className="flex w-full flex-col overflow-y-auto bg-neutral p-6 md:w-2/5">
-          {/* Header: nickname or tracking number — Poppins SemiBold (BR-33) */}
-          <h1 className="font-heading mb-3 text-xl font-semibold text-ink">
-            {data.nickname ?? data.trackingNumber}
-          </h1>
+          {/* Title with inline edit */}
+          <div className="mb-3 flex items-center gap-2">
+            {editingNickname ? (
+              <>
+                <input
+                  autoFocus
+                  type="text"
+                  value={nicknameInput}
+                  onChange={(e) => setNicknameInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') updateMutation.mutate(nicknameInput);
+                    if (e.key === 'Escape') setEditingNickname(false);
+                  }}
+                  className="flex-1 rounded border border-accent px-2 py-1 font-heading text-xl font-semibold text-ink focus:outline-none focus:ring-2 focus:ring-accent"
+                />
+                <button
+                  type="button"
+                  onClick={() => updateMutation.mutate(nicknameInput)}
+                  disabled={updateMutation.isPending}
+                  className="rounded px-2 py-1 font-body text-xs text-primary hover:bg-neutral focus:outline-none focus:ring-2 focus:ring-accent"
+                >
+                  {updateMutation.isPending ? 'Saving…' : 'Save'}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setEditingNickname(false)}
+                  className="rounded px-2 py-1 font-body text-xs text-textMuted hover:bg-neutral focus:outline-none focus:ring-2 focus:ring-accent"
+                >
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <h1 className="font-heading text-xl font-semibold text-ink">
+                  {data.nickname ?? data.trackingNumber}
+                </h1>
+                <button
+                  type="button"
+                  aria-label="Edit nickname"
+                  onClick={() => {
+                    setNicknameInput(data.nickname ?? data.trackingNumber);
+                    setEditingNickname(true);
+                  }}
+                  className="rounded p-1 text-textMuted hover:bg-neutral hover:text-ink focus:outline-none focus:ring-2 focus:ring-accent"
+                >
+                  ✏️
+                </button>
+              </>
+            )}
+          </div>
 
           {/* Status + last event */}
           <div className="mb-4 flex items-center gap-3">
@@ -239,9 +309,39 @@ export default function ShipmentDetailPage({ params }: PageProps) {
           </div>
         </div>
 
-        {/* Map placeholder — 60% width (BR-31) */}
-        <div className="flex w-full flex-1 items-center justify-center bg-neutral/50 md:w-3/5">
-          <p className="font-body text-base text-textMuted">Map visualization — coming soon</p>
+        {/* Carrier tracking panel */}
+        <div className="flex w-full flex-1 flex-col items-center justify-center gap-4 bg-neutral/50 p-8 md:w-3/5">
+          <div className="text-center">
+            <p className="font-heading mb-1 text-base font-semibold text-ink">
+              {data.carrier.displayName} Tracking
+            </p>
+            <p className="font-body mb-4 text-sm text-textMuted">
+              Track on carrier website for real-time map view
+            </p>
+            {carrierTrackingUrl(data.carrier.code, data.trackingNumber) != null && (
+              <a
+                href={carrierTrackingUrl(data.carrier.code, data.trackingNumber)!}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-2.5 font-body text-sm font-medium text-white transition-colors hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
+              >
+                Track on {data.carrier.displayName} →
+              </a>
+            )}
+          </div>
+
+          {/* Last event summary */}
+          {data.events.length > 0 && (
+            <div className="w-full max-w-sm rounded-lg bg-surface p-4 shadow-card">
+              <p className="font-body mb-0.5 text-xs font-medium uppercase tracking-wide text-textMuted">
+                Latest update
+              </p>
+              <p className="font-body text-sm font-medium text-ink">{data.events[0]!.description}</p>
+              {data.events[0]!.location != null && (
+                <p className="font-body mt-0.5 text-xs text-secondary">{data.events[0]!.location}</p>
+              )}
+            </div>
+          )}
         </div>
       </div>
 

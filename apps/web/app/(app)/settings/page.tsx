@@ -2,7 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import { useState } from 'react';
 
 import { ErrorState } from '@/components/ErrorState';
@@ -13,11 +13,22 @@ const DELETE_CONFIRM_WORD = 'DELETE';
 export default function SettingsPage() {
   const sdk = useSdk();
   const router = useRouter();
+  const { data: session } = useSession();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [confirmInput, setConfirmInput] = useState('');
   const [deleteError, setDeleteError] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+
+  const [emailNotifs, setEmailNotifs] = useState(() => {
+    if (typeof window === 'undefined') return true;
+    return localStorage.getItem('pref_email_notifs') !== 'false';
+  });
+
+  function handleEmailNotifsToggle(checked: boolean) {
+    setEmailNotifs(checked);
+    localStorage.setItem('pref_email_notifs', String(checked));
+  }
 
   const { data: profile, isLoading, isError } = useQuery({
     queryKey: ['profile'],
@@ -63,19 +74,39 @@ export default function SettingsPage() {
           )}
 
           {profile != null && (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-3">
+              {session?.user?.name && (
+                <div>
+                  <p className="font-body text-xs font-medium uppercase tracking-wide text-textMuted">Name</p>
+                  <p className="font-body text-sm text-ink">{session.user.name}</p>
+                </div>
+              )}
               <div>
-                <p className="font-body text-xs font-medium uppercase tracking-wide text-textMuted">
-                  Email
-                </p>
+                <p className="font-body text-xs font-medium uppercase tracking-wide text-textMuted">Email</p>
                 <p className="font-body text-sm text-ink">{profile.email}</p>
+              </div>
+              <div>
+                <p className="font-body text-xs font-medium uppercase tracking-wide text-textMuted">Member since</p>
+                <p className="font-body text-sm text-ink">
+                  {new Intl.DateTimeFormat('en-US', { month: 'long', year: 'numeric' }).format(new Date(profile.createdAt))}
+                </p>
               </div>
             </div>
           )}
         </div>
+
+        <div className="mt-4">
+          <button
+            type="button"
+            onClick={() => void signOut({ callbackUrl: '/' })}
+            className="rounded-md border border-border px-4 py-2 font-body text-sm font-medium text-ink transition-colors hover:bg-neutral focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2"
+          >
+            Sign out
+          </button>
+        </div>
       </section>
 
-      {/* Notifications placeholder */}
+      {/* Notifications */}
       <section aria-labelledby="notif-heading" className="mb-8">
         <h2
           id="notif-heading"
@@ -84,9 +115,49 @@ export default function SettingsPage() {
           Notifications
         </h2>
         <div className="rounded-lg bg-surface p-6 shadow-card">
-          <p className="font-body text-sm text-textMuted">
-            Manage notifications — coming soon.
-          </p>
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-body text-sm font-medium text-ink">Shipment updates</p>
+              <p className="font-body text-xs text-textMuted">
+                Get notified when your shipment status changes
+              </p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={emailNotifs}
+              onClick={() => handleEmailNotifsToggle(!emailNotifs)}
+              className={[
+                'relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2',
+                emailNotifs ? 'bg-primary' : 'bg-neutral border border-border',
+              ].join(' ')}
+            >
+              <span
+                className={[
+                  'inline-block h-4 w-4 transform rounded-full bg-white shadow transition-transform',
+                  emailNotifs ? 'translate-x-6' : 'translate-x-1',
+                ].join(' ')}
+              />
+            </button>
+          </div>
+
+          <div className="mt-4 flex items-center justify-between border-t border-border pt-4">
+            <div>
+              <p className="font-body text-sm font-medium text-ink">Delivery confirmation</p>
+              <p className="font-body text-xs text-textMuted">
+                Get notified when your package is delivered
+              </p>
+            </div>
+            <button
+              type="button"
+              role="switch"
+              aria-checked={true}
+              disabled
+              className="relative inline-flex h-6 w-11 cursor-not-allowed items-center rounded-full bg-primary/50"
+            >
+              <span className="inline-block h-4 w-4 translate-x-6 transform rounded-full bg-white shadow" />
+            </button>
+          </div>
         </div>
       </section>
 

@@ -3,7 +3,7 @@
  * AC-10: shows status + timeline only — no owner PII.
  */
 import type { DisplayShipmentStatus } from '@relay/shared-types';
-import { StatusPill } from '@relay/ui-core';
+import { BrandLogo, StatusPill } from '@relay/ui-core';
 
 import { getServerSdkClient } from '@/lib/sdk.server';
 
@@ -83,7 +83,7 @@ export default async function SharePage({ params }: PageProps) {
         className="flex h-14 items-center px-4 shadow-card"
         style={{ backgroundColor: 'var(--color-primary)' }}
       >
-        <span className="font-heading text-lg font-semibold text-white">Relay</span>
+        <BrandLogo variant="light" height={28} />
       </header>
 
       <div className="mx-auto max-w-2xl px-4 py-8">

@@ -12,6 +12,10 @@ const CARRIERS = [
   { code: 'UPS', label: 'UPS' },
   { code: 'FEDEX', label: 'FedEx' },
   { code: 'DHL', label: 'DHL' },
+  { code: 'DHLEXPRESS', label: 'DHL Express' },
+  { code: 'ONTRAC', label: 'OnTrac' },
+  { code: 'LASERSHIP', label: 'LaserShip' },
+  { code: 'AMAZON', label: 'Amazon Logistics' },
 ] as const;
 
 const schema = z.object({
@@ -99,6 +103,9 @@ export default function NewShipmentPage() {
               {errors.trackingNumber.message}
             </p>
           )}
+          <p className="mt-1 font-body text-xs text-textMuted">
+            💡 Testing? Use EasyPost test numbers: EZ1000000001–EZ7000000007
+          </p>
         </div>
 
         {/* Carrier */}

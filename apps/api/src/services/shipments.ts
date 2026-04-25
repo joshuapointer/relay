@@ -238,16 +238,26 @@ export class ShipmentsService {
 
     if (tracker.events.length) {
       for (const evt of tracker.events) {
-        await this.prisma.trackingEvent.create({
-          data: {
+        const exists = await this.prisma.trackingEvent.findFirst({
+          where: {
             shipmentId: created.id,
             occurredAt: evt.occurredAt,
-            status: evt.status,
             description: evt.description,
-            location: evt.location,
-            rawEvent: evt.raw as object,
           },
+          select: { id: true },
         });
+        if (!exists) {
+          await this.prisma.trackingEvent.create({
+            data: {
+              shipmentId: created.id,
+              occurredAt: evt.occurredAt,
+              status: evt.status,
+              description: evt.description,
+              location: evt.location,
+              rawEvent: evt.raw as object,
+            },
+          });
+        }
       }
     }
 
@@ -261,8 +271,7 @@ export class ShipmentsService {
     const where: Record<string, unknown> = { userId };
     if (opts.status) {
       const internals = DISPLAY_TO_INTERNALS[opts.status];
-      // fall back to single-value filter since mock doesn't support {in:}
-      where['status'] = internals[0];
+      where['status'] = { in: internals };
     }
     const rows = (await this.prisma.shipment.findMany({
       where,
@@ -336,16 +345,26 @@ export class ShipmentsService {
       },
     });
     for (const evt of tracker.events) {
-      await this.prisma.trackingEvent.create({
-        data: {
+      const exists = await this.prisma.trackingEvent.findFirst({
+        where: {
           shipmentId: id,
           occurredAt: evt.occurredAt,
-          status: evt.status,
           description: evt.description,
-          location: evt.location,
-          rawEvent: evt.raw as object,
         },
+        select: { id: true },
       });
+      if (!exists) {
+        await this.prisma.trackingEvent.create({
+          data: {
+            shipmentId: id,
+            occurredAt: evt.occurredAt,
+            status: evt.status,
+            description: evt.description,
+            location: evt.location,
+            rawEvent: evt.raw as object,
+          },
+        });
+      }
     }
     return this.getShipment(id, userId);
   }
