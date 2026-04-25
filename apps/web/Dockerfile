@@ -41,7 +41,10 @@ RUN pnpm --filter @relay/shared-types build
 RUN pnpm --filter @relay/sdk build
 RUN pnpm --filter @relay/ui-core build
 
-# Build with Next.js standalone output.
+# Build with Next.js standalone output. NEXT_PUBLIC_* values are baked into
+# the client bundle at build time, so they need to be ARG-exposed.
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 ENV NEXT_TELEMETRY_DISABLED=1
 RUN pnpm --filter @relay/web build
 
