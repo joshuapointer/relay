@@ -13,6 +13,7 @@
       "backgroundColor": "#003B73"
     },
     "assetBundlePatterns": ["**/*"],
+    "owner": "joshpointer-dev",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.relay.app"

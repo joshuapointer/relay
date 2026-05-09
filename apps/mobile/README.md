@@ -1,13 +1,33 @@
-# @relay/mobile
+# Relay Mobile
 
-Expo SDK 51 + Expo Router v3 mobile app for Relay shipment tracking.
+React Native app for cross-platform shipment tracking.
 
-## Running locally
+## Stack
+
+- **Expo SDK 51**
+- **Expo Router**
+- **Clerk** authentication
+- **TanStack Query**
+- **Socket.IO**
+- Internal design tokens
+
+## Setup
 
 ```bash
 # Install dependencies from repo root
 pnpm install
 
+# Build packages
+pnpm build
+
+# Run EAS development build
+cd apps/mobile
+npx eas build --profile development
+```
+
+## Running locally
+
+```bash
 # Start dev server
 pnpm --filter @relay/mobile start
 # or
@@ -51,14 +71,9 @@ CLERK_PUBLISHABLE_KEY=pk_test_...
 CLERK_MOCK_MODE=false
 ```
 
-## MVP limitations
+## Screenshots
 
-- No EAS build/submit configured for MVP — run locally via `expo start`
-- No real push notifications (requires APNs/FCM credentials)
-- Socket.IO client stubbed — WS-C-02 wires real-time updates
-- Font assets are placeholders — WS-D-03c vendors Poppins + Inter TTFs
-- App icon/splash are placeholders — WS-D-03b generates final assets
-- No real API calls — WS-C-02/03 wire `@relay/sdk` data hooks
+<!-- TODO: Add screenshots here -->
 
 ## Architecture
 
